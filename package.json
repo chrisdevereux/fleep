@@ -1,0 +1,30 @@
+{
+  "name": "fleep",
+  "version": "0.1.0",
+  "description": "Painless fluid transitions for react",
+  "main": "index.js",
+  "repository": "git@gitlab.com:chrisdevereux/fleep.git",
+  "author": "Chris Devereux <devereux.chris@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^23.3.11",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
+    "jest": "^23.6.0",
+    "popmotion": "^8.5.5",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "typescript": "^3.2.2",
+    "@storybook/react": "^4.1.4",
+    "@storybook/addon-actions": "^4.1.4",
+    "@storybook/addon-links": "^4.1.4",
+    "@storybook/addons": "^4.1.4",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0"
+  },
+  "dependencies": {},
+  "scripts": {
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  }
+}

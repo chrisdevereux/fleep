@@ -15,8 +15,17 @@ export class FluidTransitionManager implements FluidTransitionCallbacks {
     return this.callbacks.getContextElement()
   }
 
+  animationDidComplete(id: string) {
+    this.transitions.delete(id)
+  }
+
   setOutgoingElementForId(element: HTMLElement, id: string) {
-    this.transitions.set(id, new FluidTransition(element, this))
+    const existingTransition = this.transitions.get(id)
+    if (existingTransition) {
+      existingTransition.stop()
+    }
+
+    this.transitions.set(id, new FluidTransition(element, id, this))
     this.cullTransitionIfNotTriggeredImmediately(id)
   }
 

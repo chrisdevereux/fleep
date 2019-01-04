@@ -1,5 +1,4 @@
 import React from "react";
-import { spring, value, styler } from 'popmotion'
 import { FluidTransitionManager, FluidTransitionManagerCallbacks } from "./FluidTransitionManager";
 import { FluidTransitionElement, FluidTransitionElementProps } from "./FluidTransitionElement";
 

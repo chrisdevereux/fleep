@@ -2,11 +2,14 @@ import { styler, value, spring, ColdSubscription } from "popmotion";
 
 export interface FluidTransitionCallbacks {
   getContextElement(): HTMLElement
+  animationDidComplete(id: string): void
 }
 
 interface ActiveState {
   action: ColdSubscription
-  incomingElement: HTMLElement
+  transitioning: HTMLElement
+  incomingParent: HTMLElement
+  incoming: HTMLElement
 }
 
 export class FluidTransition {
@@ -15,6 +18,7 @@ export class FluidTransition {
 
   constructor(
     private outgoingElement: HTMLElement,
+    private id: string,
     private callbacks: FluidTransitionCallbacks
   ) {
     this.outgoingBounds = outgoingElement.getBoundingClientRect()
@@ -22,6 +26,18 @@ export class FluidTransition {
 
   get active() {
     return Boolean(this.activeState)
+  }
+
+  stop() {
+    if (!this.activeState) {
+      return
+    }
+
+    this.restoreDomToStaticState()
+    this.activeState.action.stop()
+    this.activeState = undefined
+    
+    this.callbacks.animationDidComplete(this.id)
   }
 
   transitionToElement(incoming: HTMLElement) {
@@ -51,27 +67,37 @@ export class FluidTransition {
     transitioning.style.left = "0px"
     context.appendChild(transitioning)
 
-
     const incomingParent = incoming.parentElement!
 
     const action = spring({
       from: transitionVal.get(),
       to,
-      stiffness: 50,
+      stiffness: 500,
     }).start({
       update: transitionVal.update.bind(transitionVal),
       complete: () => {
         transitionVal.complete()
-        transitioning.remove()
-        incomingParent.appendChild(incoming)
+        this.restoreDomToStaticState()
+        this.activeState = undefined
       }
     })
 
     this.activeState = {
       action,
-      incomingElement: incoming
+      incomingParent,
+      transitioning,
+      incoming
     }
 
     incoming.remove()
+  }
+
+  private restoreDomToStaticState() {
+    if (!this.activeState) {
+      return
+    }
+
+    this.activeState.transitioning.remove()
+    this.activeState.incomingParent.appendChild(this.activeState.incoming)
   }
 }

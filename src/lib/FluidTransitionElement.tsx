@@ -3,8 +3,6 @@ import React from "react";
 
 export interface FluidTransitionElementProps {
   id: string
-  style?: React.CSSProperties
-  className?: string
   children: React.ReactElement<{}>
 }
 
@@ -38,7 +36,18 @@ export class FluidTransitionElement extends React.Component<FluidTransitionEleme
 
   render() {
     const child = React.Children.only(this.props.children)
-    return React.cloneElement(child, { ref: this.childRef, key: this.props.id })
+
+    return React.cloneElement(
+      child,
+      {
+        ref: this.childRef,
+        key: this.props.id,
+        style: {
+          ...child.props.style,
+          backgroundColor: 'blue'
+        }
+      }
+    )
   }
 }
 

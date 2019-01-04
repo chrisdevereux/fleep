@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
-import { createTransitonScope } from '../src';
+import { createTransitionContext } from '../src';
 import { Keyframes, Frame } from 'react-keyframes';
 
-const Transition = createTransitonScope()
+const Transition = createTransitionContext()
 
 const Block = React.forwardRef((props: { index: number }, ref: React.Ref<HTMLDivElement>) => (
   <div
@@ -26,12 +26,12 @@ storiesOf('fluid transitions', module)
     <Transition>
       <Keyframes loop>
         <Frame key={1} duration={2_000}>
-          <Transition.Fluid>
+          <Transition.Fluid id="1">
             <Block index={0} />
           </Transition.Fluid>
         </Frame>
         <Frame key={2} duration={2_000}>
-          <Transition.Fluid>
+          <Transition.Fluid id="1">
             <Block index={1} />
           </Transition.Fluid>
         </Frame>

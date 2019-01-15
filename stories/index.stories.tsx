@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { createTransitionContext } from '../src';
 import { Keyframes, Frame } from 'react-keyframes';
 
-const Transition = createTransitionContext()
+const { Transition, TransitionContext } = createTransitionContext()
 
 const Block = React.forwardRef((props: { index: number }, ref: React.Ref<HTMLDivElement>) => (
   <div
@@ -23,18 +23,18 @@ const Block = React.forwardRef((props: { index: number }, ref: React.Ref<HTMLDiv
 
 storiesOf('fluid transitions', module)
   .add('flip flop', () =>
-    <Transition>
+    <TransitionContext>
       <Keyframes loop>
         <Frame key={1} duration={2_000}>
-          <Transition.Fluid id="1">
+          <Transition id="1">
             <Block index={0} />
-          </Transition.Fluid>
+          </Transition>
         </Frame>
         <Frame key={2} duration={2_000}>
-          <Transition.Fluid id="1">
+          <Transition id="1">
             <Block index={1} />
-          </Transition.Fluid>
+          </Transition>
         </Frame>
       </Keyframes>
-    </Transition>
+    </TransitionContext>
   )

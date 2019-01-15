@@ -1,4 +1,4 @@
-import { TransitionContext } from "./TransitionContext";
+import { FluidManagerContext } from "./TransitionContext";
 import React from "react";
 
 export interface FluidTransitionElementProps {
@@ -7,7 +7,7 @@ export interface FluidTransitionElementProps {
 }
 
 export class FluidTransitionElement extends React.Component<FluidTransitionElementProps> {
-  context!: TransitionContext | undefined
+  context!: FluidManagerContext | undefined
   childRef = React.createRef()
 
   private get element(): HTMLElement {
@@ -42,10 +42,6 @@ export class FluidTransitionElement extends React.Component<FluidTransitionEleme
       {
         ref: this.childRef,
         key: this.props.id,
-        style: {
-          ...child.props.style,
-          backgroundColor: 'blue'
-        }
       }
     )
   }

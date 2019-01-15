@@ -2,22 +2,19 @@ import React from "react";
 import { FluidTransitionManager, FluidTransitionManagerCallbacks } from "./FluidTransitionManager";
 import { FluidTransitionElement, FluidTransitionElementProps } from "./FluidTransitionElement";
 
-type TransitionScope = React.ComponentType & {
-  Fluid: React.ComponentType<FluidTransitionElementProps>
+interface TransitionComponents {
+  Transition: React.ComponentType<FluidTransitionElementProps>
+  TransitionContext: React.ComponentType
 }
 
-export interface TransitionContext {
+export interface FluidManagerContext {
   fluidManager: FluidTransitionManager
 }
 
-export function createTransitionContext(): TransitionScope {
-  const context = React.createContext<TransitionContext | undefined>(undefined)
+export function createTransitionContext(): TransitionComponents {
+  const context = React.createContext<FluidManagerContext | undefined>(undefined)
 
-  return class TransitionContext extends React.Component implements TransitionContext, FluidTransitionManagerCallbacks {
-    static Fluid = class FluidTransition extends FluidTransitionElement {
-      static contextType = context
-    }
-
+  class FluidTransitionContext extends React.Component implements FluidManagerContext, FluidTransitionManagerCallbacks {
     private ref = React.createRef<HTMLDivElement>()
 
     fluidManager = new FluidTransitionManager(this)
@@ -39,5 +36,14 @@ export function createTransitionContext(): TransitionScope {
         </context.Provider>
       )
     }
+  }
+
+  class FluidTransitionContextElement extends FluidTransitionElement {
+    static contextType = context
+  }
+
+  return {
+    Transition: FluidTransitionContextElement,
+    TransitionContext: FluidTransitionContext
   }
 }

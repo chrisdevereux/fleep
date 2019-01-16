@@ -46,15 +46,19 @@ storiesOf('fluid transitions', module)
           <span />
         </Frame>
 
-        <Frame key={2} duration={500}>
+        <Frame key={2} duration={1_500}>
           <Transition id="1">
+            <Transition.In>
+              <Block transform="scale(0)" />
+            </Transition.In>
+
             <Block />
           </Transition>
         </Frame>
         
         <Frame key={3} duration={5_000}>
           <Transition id="1">
-            <Block left={200} top={200} width={500} height={500} color="red" />
+            <Block left={200} top={200} width={500} height={500} />
           </Transition>
         </Frame>
       </Keyframes>

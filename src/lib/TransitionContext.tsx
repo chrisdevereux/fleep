@@ -1,9 +1,9 @@
 import React from "react";
 import { FluidTransitionManager, FluidTransitionManagerCallbacks } from "./FluidTransitionManager";
-import { FluidTransitionElement, FluidTransitionElementProps } from "./FluidTransitionElement";
+import { FluidTransitionComponent, FluidTransitionElementProps } from "./FluidTransitionElement";
 
 interface TransitionComponents {
-  Transition: React.ComponentType<FluidTransitionElementProps>
+  Transition: typeof FluidTransitionComponent 
   TransitionContext: React.ComponentType
 }
 
@@ -38,7 +38,7 @@ export function createTransitionContext(): TransitionComponents {
     }
   }
 
-  class FluidTransitionContextElement extends FluidTransitionElement {
+  class FluidTransitionContextElement extends FluidTransitionComponent {
     static contextType = context
   }
 

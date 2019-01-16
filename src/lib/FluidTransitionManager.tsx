@@ -1,11 +1,20 @@
-import { FluidTransition, FluidTransitionCallbacks } from "./FluidTransition";
+import { TransitionTo } from "./transition-type/TransitionTo";
+import { TransitionType, TransitionTypeDelegate } from "./transition-type/TransitionType"
+import { TransitionIn } from "./transition-type/TransitionIn";
 
 export interface FluidTransitionManagerCallbacks {
   getContextElement(): HTMLElement
 }
 
-export class FluidTransitionManager implements FluidTransitionCallbacks {
-  private transitions = new Map<string, FluidTransition>()
+export interface TransitionableComponent {
+  id: string
+  element: HTMLElement
+  transitionIn?: React.ReactNode
+  transitionOut?: React.ReactNode
+}
+
+export class FluidTransitionManager implements TransitionTypeDelegate {
+  private transitions = new Map<string, TransitionType>()
 
   constructor(
     private callbacks: FluidTransitionManagerCallbacks
@@ -19,21 +28,31 @@ export class FluidTransitionManager implements FluidTransitionCallbacks {
     this.transitions.delete(id)
   }
 
-  setOutgoingElementForId(element: HTMLElement, id: string) {
-    const existingTransition = this.transitions.get(id)
-    if (existingTransition) {
-      existingTransition.stop()
+  componentWillUnmount({ element, id, transitionOut }: TransitionableComponent) {
+    const interpolation = this.transitions.get(id)
+    if (interpolation) {
+      interpolation.stop()
     }
 
-    this.transitions.set(id, new FluidTransition(element, id, this))
+    this.transitions.set(id, new TransitionTo(element, id, this))
     this.cullTransitionIfNotTriggeredImmediately(id)
   }
 
-  setIncomingElementForId(element: HTMLElement, id: string) {
-    const transition = this.transitions.get(id)
+  componentDidMount({ element, id, transitionIn }: TransitionableComponent) {
+    const transitionTo = this.transitions.get(id)
 
-    if (transition) {
-      transition.transitionToElement(element)
+    if (transitionTo) {
+      if (transitionTo.transitionToElement) {
+        transitionTo.transitionToElement(element)
+      }
+
+    } else {
+      if (transitionIn) {
+        const progress = new TransitionIn(element, id, transitionIn, this)
+        this.transitions.set(id, progress)
+  
+        progress.start()
+      }
     }
   }
 

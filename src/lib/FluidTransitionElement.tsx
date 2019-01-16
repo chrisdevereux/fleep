@@ -41,7 +41,6 @@ export class FluidTransitionElement extends React.Component<FluidTransitionEleme
       child,
       {
         ref: this.childRef,
-        key: this.props.id,
       }
     )
   }

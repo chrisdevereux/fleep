@@ -5,6 +5,13 @@ export interface FluidTransitionCallbacks {
   animationDidComplete(id: string): void
 }
 
+type StyleKey = keyof CSSStyleDeclaration
+
+const styleKeys: StyleKey[] = [
+  'borderRadius',
+  'opacity',
+]
+
 interface ActiveState {
   action: ColdSubscription
   transitioning: HTMLElement
@@ -14,14 +21,18 @@ interface ActiveState {
 
 export class FluidTransition {
   private outgoingBounds: ClientRect
+  private outgoingStyles: Record<string, string> = {}
   private activeState?: ActiveState
 
   constructor(
     private outgoingElement: HTMLElement,
     private id: string,
-    private callbacks: FluidTransitionCallbacks
+    private callbacks: FluidTransitionCallbacks,
   ) {
     this.outgoingBounds = outgoingElement.getBoundingClientRect()
+
+    const computedStyles = getComputedStyle(outgoingElement)
+    styleKeys.forEach(key => this.outgoingStyles[key] = computedStyles[key])
   }
 
   get active() {
@@ -51,16 +62,24 @@ export class FluidTransition {
 
     const from = {
       x: startBounds.left - contextBounds.left,
-      y: startBounds.top - contextBounds.top
+      y: startBounds.top - contextBounds.top,
+      width: startBounds.width,
+      height: startBounds.height,
+      ...this.outgoingStyles
     }
 
-    const to = {
+    const to: any = {
       x: targetBounds.left - contextBounds.left,
-      y: targetBounds.top - contextBounds.top
+      y: targetBounds.top - contextBounds.top,
+      width: targetBounds.width,
+      height: targetBounds.height,
     }
+
+    const incomingStyle = getComputedStyle(incoming)
+    styleKeys.forEach((key: any) => to[key] = incomingStyle[key])
     
     const transitionStyler = styler(transitioning)
-    const transitionVal = value(from, transitionStyler.set)
+    const transitionVal = value(from as any, transitionStyler.set)
 
     transitioning.style.position = 'absolute'
     transitioning.style.top = "0px"

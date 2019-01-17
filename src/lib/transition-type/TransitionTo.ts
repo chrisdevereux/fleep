@@ -41,7 +41,7 @@ export class TransitionTo implements TransitionType {
       startProps: this.outgoingStyles,
       endProps: getPermittedCssStyles(getComputedStyle(incoming)),
       onCompleted: () => {
-        incoming.style.opacity = '1';
+        incoming.style.opacity = null;
         transitioning.remove()
         this.delegate.animationDidComplete(this.id)
       }

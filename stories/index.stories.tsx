@@ -15,7 +15,7 @@ const Block = React.forwardRef((props: React.CSSProperties, ref: React.Ref<HTMLD
       top: 0,
       width: 100,
       height: 100,
-      borderRadius: props.width ? Number(props.width) * 0.5 : 50,
+      borderRadius: props.width || 100,
       backgroundColor: 'tomato',
       ...props
     }}
@@ -42,7 +42,7 @@ storiesOf('fluid transitions', module)
   .add('enter - transition - exit', () =>
     <TransitionContext>
       <Keyframes loop>
-        <Frame key={1} duration={500}>
+        <Frame key={1} duration={1_500}>
           <span />
         </Frame>
 
@@ -56,8 +56,12 @@ storiesOf('fluid transitions', module)
           </Transition>
         </Frame>
         
-        <Frame key={3} duration={5_000}>
+        <Frame key={3} duration={3_000}>
           <Transition id="1">
+            <Transition.Out>
+              <Block left={200} top={200} width={500} height={500} opacity={0} transform="scale(0.1)" />
+            </Transition.Out>
+
             <Block left={200} top={200} width={500} height={500} />
           </Transition>
         </Frame>

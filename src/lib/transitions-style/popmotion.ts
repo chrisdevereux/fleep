@@ -25,7 +25,7 @@ export function createSpringAnimation(): TransitionStyle {
       const action = spring({
         from: transitionVal.get(),
         to,
-        stiffness: 300
+        stiffness: 200
       })
       
       const subscription = action.start({

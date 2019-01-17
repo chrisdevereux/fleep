@@ -38,7 +38,7 @@ export class TransitionIn implements TransitionType {
         startProps: getPermittedCssStyles(getComputedStyle(transitioning)),
         endProps: getPermittedCssStyles(getComputedStyle(incoming)),
         onCompleted: () => {
-          incoming.style.opacity = '1';
+          incoming.style.opacity = null;
           unmountComponentAtNode(transitioningParent)
 
           this.delegate.animationDidComplete(this.id)

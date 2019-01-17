@@ -1,6 +1,7 @@
 import { TransitionTo } from "./transition-type/TransitionTo";
 import { TransitionType, TransitionTypeDelegate } from "./transition-type/TransitionType"
 import { TransitionIn } from "./transition-type/TransitionIn";
+import { TransitionOut } from "./transition-type/TransitionOut";
 
 export interface FluidTransitionManagerCallbacks {
   getContextElement(): HTMLElement
@@ -28,14 +29,31 @@ export class FluidTransitionManager implements TransitionTypeDelegate {
     this.transitions.delete(id)
   }
 
-  componentWillUnmount({ element, id, transitionOut }: TransitionableComponent) {
-    const interpolation = this.transitions.get(id)
-    if (interpolation) {
-      interpolation.stop()
+  async componentWillUnmount({ element, id, transitionOut }: TransitionableComponent) {
+    const existingTransition = this.transitions.get(id)
+    if (existingTransition) {
+      existingTransition.stop()
     }
 
-    this.transitions.set(id, new TransitionTo(element, id, this))
-    this.cullTransitionIfNotTriggeredImmediately(id)
+    const transitionOutProgress = new TransitionOut(element, id, transitionOut, this)
+    const transitionToProgress = new TransitionTo(element, id, this)
+    this.transitions.set(id, transitionToProgress)
+    
+    transitionOutProgress.prepareStart()
+
+    await new Promise(resolve => setTimeout(resolve))
+  
+    if (!transitionToProgress.active) {
+      this.transitions.delete(id)
+
+      if (transitionOut) {
+        this.transitions.set(id, transitionOutProgress)
+        transitionOutProgress.start()
+      }
+
+    } else {
+      transitionOutProgress.abortStart()
+    }
   }
 
   componentDidMount({ element, id, transitionIn }: TransitionableComponent) {
@@ -54,15 +72,5 @@ export class FluidTransitionManager implements TransitionTypeDelegate {
         progress.start()
       }
     }
-  }
-
-  private cullTransitionIfNotTriggeredImmediately(id: string) {
-    setTimeout(() => {
-      const transition = this.transitions.get(id)
-
-      if (transition && !transition.active) {
-        this.transitions.delete(id)
-      }
-    })
   }
 }

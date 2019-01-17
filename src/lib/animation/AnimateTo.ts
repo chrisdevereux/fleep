@@ -1,18 +1,18 @@
 import { styler, value, spring, ColdSubscription } from "popmotion";
-import { TransitionType, TransitionTypeDelegate } from "./TransitionType";
-import { StyleMap, getPermittedCssStyles } from "../style";
-import { createSpringAnimation } from "../transitions-style/popmotion";
-import { TransitionStyle } from "../transitions-style/TransitionStyle";
+import { Animation, AnimationDelegate } from "./Animation";
+import { StyleMap, getPermittedCssStyles } from "../support/style";
+import { createSpringAnimation } from "../transition/popmotion";
+import { Transition } from "../transition/Transition";
 
-export class TransitionTo implements TransitionType {
+export class AnimateTo implements Animation {
   private outgoingBounds: ClientRect
   private outgoingStyles: StyleMap
-  private progress?: TransitionStyle.Progress
+  private progress?: Transition.Progress
 
   constructor(
     private outgoingElement: HTMLElement,
-    private id: string,
-    private delegate: TransitionTypeDelegate,
+    readonly id: string,
+    private delegate: AnimationDelegate,
   ) {
     this.outgoingBounds = outgoingElement.getBoundingClientRect()
     this.outgoingStyles = getPermittedCssStyles(getComputedStyle(outgoingElement))
@@ -43,7 +43,7 @@ export class TransitionTo implements TransitionType {
       onCompleted: () => {
         incoming.style.opacity = null;
         transitioning.remove()
-        this.delegate.animationDidComplete(this.id)
+        this.delegate.animationDidComplete(this)
       }
     })
 

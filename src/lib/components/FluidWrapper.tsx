@@ -1,20 +1,20 @@
-import { FluidManagerContext } from "./TransitionContext";
+import { FluidManagerContext } from "./FluidContext";
 import React from "react";
-import { TransitionableComponent } from "./FluidTransitionManager";
+import { AnimatedComponent } from "../AnimationManager";
 
-export interface FluidTransitionElementProps {
+export interface FluidWrapperProps {
   id: string
   children: React.ReactNode
 }
 
 type FluidChild = React.ReactElement<React.Props<{}>>
 
-export class FluidTransitionComponent extends React.Component<FluidTransitionElementProps> implements TransitionableComponent {
+export class FluidWrapper extends React.Component<FluidWrapperProps> implements AnimatedComponent {
   static In: React.SFC = (props) => props.children || null as any
   static Out: React.SFC = (props) => props.children || null as any
 
   private static isMainElement(x: React.ReactNode): x is FluidChild {
-    return React.isValidElement(x) && x.type !== FluidTransitionComponent.In && x.type !== FluidTransitionComponent.Out
+    return React.isValidElement(x) && x.type !== FluidWrapper.In && x.type !== FluidWrapper.Out
   }
   
   context!: FluidManagerContext | undefined
@@ -33,11 +33,11 @@ export class FluidTransitionComponent extends React.Component<FluidTransitionEle
   }
 
   get transitionIn() {
-    return this.children.find(x => React.isValidElement(x) && x.type === FluidTransitionComponent.In) as FluidChild
+    return this.children.find(x => React.isValidElement(x) && x.type === FluidWrapper.In) as FluidChild
   }
 
   get transitionOut() {
-    const config = this.children.find(x => React.isValidElement(x) && x.type === FluidTransitionComponent.Out) as FluidChild
+    const config = this.children.find(x => React.isValidElement(x) && x.type === FluidWrapper.Out) as FluidChild
     return config && config.props.children
   }
 
@@ -54,7 +54,7 @@ export class FluidTransitionComponent extends React.Component<FluidTransitionEle
   }
 
   private get mainChild() {
-    const child = this.children.find(FluidTransitionComponent.isMainElement)
+    const child = this.children.find(FluidWrapper.isMainElement)
     if (!child) {
       throw Error('Transition must contain a valid element')
     }

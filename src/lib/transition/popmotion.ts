@@ -1,7 +1,7 @@
 import { styler, value, spring } from "popmotion";
-import { TransitionStyle } from "./TransitionStyle";
+import { Transition } from "./Transition";
 
-export function createSpringAnimation(): TransitionStyle {
+export function createSpringAnimation(): Transition {
   return {
     transition({ element, startBounds, endBounds, contextBounds, startProps, endProps, onCompleted }) {
       const from = {
@@ -20,8 +20,8 @@ export function createSpringAnimation(): TransitionStyle {
         ...endProps
       }
 
-      const transitionStyler = styler(element)
-      const transitionVal = value(from as any, transitionStyler.set)
+      const Transitionr = styler(element)
+      const transitionVal = value(from as any, Transitionr.set)
       const action = spring({
         from: transitionVal.get(),
         to,

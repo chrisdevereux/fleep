@@ -1,23 +1,23 @@
 import React from "react";
-import { FluidTransitionManager, FluidTransitionManagerCallbacks } from "./FluidTransitionManager";
-import { FluidTransitionComponent, FluidTransitionElementProps } from "./FluidTransitionElement";
+import { AnimationManager, AnimationManagerDelegate } from "../AnimationManager";
+import { FluidWrapper } from "./FluidWrapper";
 
 interface TransitionComponents {
-  Transition: typeof FluidTransitionComponent 
+  Transition: typeof FluidWrapper 
   TransitionContext: React.ComponentType
 }
 
 export interface FluidManagerContext {
-  fluidManager: FluidTransitionManager
+  fluidManager: AnimationManager
 }
 
 export function createTransitionContext(): TransitionComponents {
   const context = React.createContext<FluidManagerContext | undefined>(undefined)
 
-  class FluidTransitionContext extends React.Component implements FluidManagerContext, FluidTransitionManagerCallbacks {
+  class FluidTransitionContext extends React.Component implements FluidManagerContext, AnimationManagerDelegate {
     private ref = React.createRef<HTMLDivElement>()
 
-    fluidManager = new FluidTransitionManager(this)
+    fluidManager = new AnimationManager(this)
 
     getContextElement(): HTMLElement {
       if (!this.ref.current) {
@@ -38,7 +38,7 @@ export function createTransitionContext(): TransitionComponents {
     }
   }
 
-  class FluidTransitionContextElement extends FluidTransitionComponent {
+  class FluidTransitionContextElement extends FluidWrapper {
     static contextType = context
   }
 

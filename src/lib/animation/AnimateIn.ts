@@ -1,19 +1,18 @@
-import { TransitionType, TransitionTypeDelegate } from "./TransitionType";
+import { Animation, AnimationDelegate } from "./Animation";
 import { render, unmountComponentAtNode } from "react-dom";
 import React from "react";
-import { TransitionTo } from "./TransitionTo";
-import { TransitionStyle } from "../transitions-style/TransitionStyle";
-import { createSpringAnimation } from "../transitions-style/popmotion";
-import { getPermittedCssStyles } from "../style";
+import { Transition } from "../transition/Transition";
+import { createSpringAnimation } from "../transition/popmotion";
+import { getPermittedCssStyles } from "../support/style";
 
-export class TransitionIn implements TransitionType {
-  private progress?: TransitionStyle.Progress
+export class AnimateIn implements Animation {
+  private progress?: Transition.Progress
   
   constructor(
     private incomingElement: HTMLElement,
-    private id: string,
+    readonly id: string,
     private transitionDef: React.ReactNode,
-    private delegate: TransitionTypeDelegate
+    private delegate: AnimationDelegate
   ) { }
 
   get active() {
@@ -41,7 +40,7 @@ export class TransitionIn implements TransitionType {
           incoming.style.opacity = null;
           unmountComponentAtNode(transitioningParent)
 
-          this.delegate.animationDidComplete(this.id)
+          this.delegate.animationDidComplete(this)
         }
       })
   

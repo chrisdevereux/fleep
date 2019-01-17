@@ -28,7 +28,7 @@ export class AnimateTo implements Animation {
     }
   }
 
-  transitionToElement(incoming: HTMLElement) {
+  startWithElement(incoming: HTMLElement) {
     const context = this.delegate.getContextElement()
     const outgoing = this.outgoingElement
     const transitioning = outgoing.cloneNode() as HTMLElement

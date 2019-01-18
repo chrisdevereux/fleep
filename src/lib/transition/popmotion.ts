@@ -1,9 +1,18 @@
 import { styler, value, spring } from "popmotion";
 import { Transition } from "./Transition";
 
-export function createSpringAnimation(): Transition {
+interface SpringAnimationConfig {
+  stiffness: number
+  damping: number
+  mass: number
+  velocity: number
+  restDelta: number
+  restSpeed: number
+}
+
+export function springTransition(config: Partial<SpringAnimationConfig> = {}): Transition {
   return {
-    transition({ element, startBounds, endBounds, contextBounds, startProps, endProps, onCompleted }) {
+    start({ element, startBounds, endBounds, contextBounds, startProps, endProps, onCompleted }) {
       const from = {
         x: startBounds.left - contextBounds.left,
         y: startBounds.top - contextBounds.top,
@@ -20,12 +29,12 @@ export function createSpringAnimation(): Transition {
         ...endProps
       }
 
-      const Transitionr = styler(element)
-      const transitionVal = value(from as any, Transitionr.set)
+      const transitioner = styler(element)
+      const transitionVal = value(from as any, transitioner.set)
       const action = spring({
         from: transitionVal.get(),
         to,
-        stiffness: 200
+        ...config
       })
       
       const subscription = action.start({

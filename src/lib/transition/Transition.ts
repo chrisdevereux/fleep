@@ -11,7 +11,7 @@ export interface TransitionParams {
 }
 
 export interface Transition {
-  transition(params: TransitionParams): Transition.Progress
+  start(params: TransitionParams): Transition.Progress
 }
 
 export namespace Transition {

@@ -4,6 +4,7 @@ import { AnimateIn } from "./animation/AnimateIn";
 import { AnimateOut } from "./animation/AnimateOut";
 import { MultiMap } from "./support/MultiMap";
 import { isInstanceOf } from "./support/util";
+import { TransitionDescriptor } from "./TransitionDescriptor";
 
 export interface AnimationManagerDelegate {
   getContextElement(): HTMLElement
@@ -12,8 +13,9 @@ export interface AnimationManagerDelegate {
 export interface AnimatedComponent {
   id: string
   element: HTMLElement
-  transitionIn?: React.ReactNode
-  transitionOut?: React.ReactNode
+  transitionIn?: TransitionDescriptor
+  transitionOut?: TransitionDescriptor
+  transitionFrom: TransitionDescriptor
 }
 
 export class AnimationManager implements AnimationDelegate {
@@ -31,29 +33,33 @@ export class AnimationManager implements AnimationDelegate {
     this.activeAnimations.delete(animation.id, animation)
   }
 
-  async componentWillUnmount({ element, id, transitionOut }: AnimatedComponent) {
+  async componentWillUnmount({ element, id, transitionOut, transitionFrom }: AnimatedComponent) {
     this.activeAnimations
       .get(id)
       .forEach(a => a.stop())
 
-    const animateOut = new AnimateOut(element, id, transitionOut, this)
-    const animateTo = new AnimateTo(element, id, this)
+    const animateOut = transitionOut && new AnimateOut(element, id, transitionOut, this)
+    const animateTo = new AnimateTo(element, id, transitionFrom, this)
     this.activeAnimations.add(id, animateTo)
     
-    animateOut.prepareStart()
+    if (animateOut) {
+      animateOut.prepareStart()
+    }
 
     await new Promise(resolve => setTimeout(resolve))
   
     if (!animateTo.active) {
       this.activeAnimations.delete(id, animateTo)
 
-      if (transitionOut) {
+      if (animateOut) {
         this.activeAnimations.add(id, animateOut)
         animateOut.start()
       }
 
     } else {
-      animateOut.abortStart()
+      if (animateOut) {
+        animateOut.abortStart()
+      }
     }
   }
 

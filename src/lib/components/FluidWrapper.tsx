@@ -1,22 +1,17 @@
-import { FluidManagerContext } from "./FluidContext";
 import React from "react";
+import { FluidManagerContext } from "./FluidContext";
 import { AnimatedComponent } from "../AnimationManager";
+import { TransitionIn, TransitionOut, TransitionConfig, TransitionFrom } from "./TransitionConfig";
+import { isElementOfType, isElementNotOfType } from "../support/util";
+import { TransitionDescriptor } from "../TransitionDescriptor";
+import { springTransition } from "../transition/popmotion";
 
 export interface FluidWrapperProps {
   id: string
   children: React.ReactNode
 }
 
-type FluidChild = React.ReactElement<React.Props<{}>>
-
 export class FluidWrapper extends React.Component<FluidWrapperProps> implements AnimatedComponent {
-  static In: React.SFC = (props) => props.children || null as any
-  static Out: React.SFC = (props) => props.children || null as any
-
-  private static isMainElement(x: React.ReactNode): x is FluidChild {
-    return React.isValidElement(x) && x.type !== FluidWrapper.In && x.type !== FluidWrapper.Out
-  }
-  
   context!: FluidManagerContext | undefined
   childRef = React.createRef()
 
@@ -32,13 +27,31 @@ export class FluidWrapper extends React.Component<FluidWrapperProps> implements 
     throw Error('FluidTransition must have a single html element as its child')
   }
 
-  get transitionIn() {
-    return this.children.find(x => React.isValidElement(x) && x.type === FluidWrapper.In) as FluidChild
+  get transitionIn(): TransitionDescriptor | undefined {
+    const config = this.children.find(isElementOfType(TransitionIn))
+    
+    return config && {
+      target: React.Children.only(config.props.children),
+      transition: config.props.using || springTransition()
+    }
   }
 
   get transitionOut() {
-    const config = this.children.find(x => React.isValidElement(x) && x.type === FluidWrapper.Out) as FluidChild
-    return config && config.props.children
+    const config = this.children.find(isElementOfType(TransitionOut))
+
+    return config && {
+      target: React.Children.only(config.props.children),
+      transition: config.props.using || springTransition()
+    }
+  }
+
+  get transitionFrom() {
+    const config = this.children.find(isElementOfType(TransitionFrom))
+
+    return {
+      target: this.mainChild,
+      transition: config && config.props.using || springTransition()
+    }
   }
 
   private get manager() {
@@ -54,7 +67,7 @@ export class FluidWrapper extends React.Component<FluidWrapperProps> implements 
   }
 
   private get mainChild() {
-    const child = this.children.find(FluidWrapper.isMainElement)
+    const child = this.children.find(isElementNotOfType(TransitionConfig))
     if (!child) {
       throw Error('Transition must contain a valid element')
     }

@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
-import { createTransitionContext } from '../src';
+import { createTransitionContext, TransitionIn, TransitionOut, TransitionFrom } from '../src';
 import { Keyframes, Frame } from 'react-keyframes';
+import { springTransition } from '../src/popmotion';
 
 const { Transition, TransitionContext } = createTransitionContext()
 
@@ -48,9 +49,11 @@ storiesOf('fluid transitions', module)
 
         <Frame key={2} duration={1_500}>
           <Transition id="1">
-            <Transition.In>
+            <TransitionIn>
               <Block transform="scale(0)" />
-            </Transition.In>
+            </TransitionIn>
+
+            <TransitionFrom using={springTransition({ stiffness: 300 })} />
 
             <Block />
           </Transition>
@@ -58,9 +61,9 @@ storiesOf('fluid transitions', module)
         
         <Frame key={3} duration={3_000}>
           <Transition id="1">
-            <Transition.Out>
+            <TransitionOut using={springTransition({ stiffness: 300, mass: 1.5 })}>
               <Block left={200} top={200} width={500} height={500} opacity={0} transform="scale(0.1)" />
-            </Transition.Out>
+            </TransitionOut>
 
             <Block left={200} top={200} width={500} height={500} />
           </Transition>

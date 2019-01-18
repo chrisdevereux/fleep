@@ -1,8 +1,8 @@
-import { styler, value, spring, ColdSubscription } from "popmotion";
 import { Animation, AnimationDelegate } from "./Animation";
 import { StyleMap, getPermittedCssStyles } from "../support/style";
-import { createSpringAnimation } from "../transition/popmotion";
+import { springTransition } from "../transition/popmotion";
 import { Transition } from "../transition/Transition";
+import { TransitionDescriptor } from "../TransitionDescriptor";
 
 export class AnimateTo implements Animation {
   private outgoingBounds: ClientRect
@@ -12,6 +12,7 @@ export class AnimateTo implements Animation {
   constructor(
     private outgoingElement: HTMLElement,
     readonly id: string,
+    private transitionDef: TransitionDescriptor,
     private delegate: AnimationDelegate,
   ) {
     this.outgoingBounds = outgoingElement.getBoundingClientRect()
@@ -33,7 +34,7 @@ export class AnimateTo implements Animation {
     const outgoing = this.outgoingElement
     const transitioning = outgoing.cloneNode() as HTMLElement
 
-    this.progress = createSpringAnimation().transition({
+    this.progress = this.transitionDef.transition.start({
       contextBounds: context.getBoundingClientRect(),
       startBounds: this.outgoingBounds,
       endBounds: incoming.getBoundingClientRect(),

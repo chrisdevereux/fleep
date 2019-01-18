@@ -2,8 +2,9 @@ import { Animation, AnimationDelegate } from "./Animation";
 import { render, unmountComponentAtNode } from "react-dom";
 import React from "react";
 import { Transition } from "../transition/Transition";
-import { createSpringAnimation } from "../transition/popmotion";
+import { springTransition } from "../transition/popmotion";
 import { getPermittedCssStyles } from "../support/style";
+import { TransitionDescriptor } from "../TransitionDescriptor";
 
 export class AnimateIn implements Animation {
   private progress?: Transition.Progress
@@ -11,7 +12,7 @@ export class AnimateIn implements Animation {
   constructor(
     private incomingElement: HTMLElement,
     readonly id: string,
-    private transitionDef: React.ReactNode,
+    private transitionDef: TransitionDescriptor,
     private delegate: AnimationDelegate
   ) { }
 
@@ -26,10 +27,10 @@ export class AnimateIn implements Animation {
   
     context.appendChild(transitioningParent)
 
-    render(React.Children.only(this.transitionDef), transitioningParent, () => {
+    render(this.transitionDef.target, transitioningParent, () => {
       const transitioning = transitioningParent.children[0] as HTMLElement
   
-      this.progress = createSpringAnimation().transition({
+      this.progress = this.transitionDef.transition.start({
         contextBounds: context.getBoundingClientRect(),
         startBounds: transitioning.getBoundingClientRect(),
         endBounds: incoming.getBoundingClientRect(),

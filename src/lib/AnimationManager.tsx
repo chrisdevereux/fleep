@@ -8,6 +8,7 @@ import { TransitionDescriptor } from "./TransitionDescriptor";
 
 export interface AnimationManagerDelegate {
   getContextElement(): HTMLElement
+  readonly contextMounted: boolean
 }
 
 export interface AnimatedComponent {
@@ -64,6 +65,10 @@ export class AnimationManager implements AnimationDelegate {
   }
 
   componentDidMount({ element, id, transitionIn }: AnimatedComponent) {
+    if (!this.callbacks.contextMounted) {
+      return
+    }
+
     const animateTo = this.activeAnimations.get(id)
       .find(isInstanceOf(AnimateTo))
 

@@ -1,10 +1,9 @@
 import { Animation, AnimationDelegate } from "./Animation";
 import { render, unmountComponentAtNode } from "react-dom";
-import React from "react";
 import { Transition } from "../transition/Transition";
-import { springTransition } from "../transition/popmotion";
 import { getPermittedCssStyles } from "../support/style";
 import { TransitionDescriptor } from "../TransitionDescriptor";
+import { getScreenRect } from "../support/geometry";
 
 export class AnimateIn implements Animation {
   private progress?: Transition.Progress
@@ -25,15 +24,21 @@ export class AnimateIn implements Animation {
     const transitioningParent = document.createElement('div')
     const incoming = this.incomingElement
   
+    transitioningParent.style.opacity = '0'
+    transitioningParent.style.position = 'absolute'
+    transitioningParent.style.left = '0px'
+    transitioningParent.style.top = '0px'
+    transitioningParent.style.width = '100%'
+    transitioningParent.style.height = '100%'
     context.appendChild(transitioningParent)
 
     render(this.transitionDef.target, transitioningParent, () => {
       const transitioning = transitioningParent.children[0] as HTMLElement
   
       this.progress = this.transitionDef.transition.start({
-        contextBounds: context.getBoundingClientRect(),
-        startBounds: transitioning.getBoundingClientRect(),
-        endBounds: incoming.getBoundingClientRect(),
+        contextBounds: getScreenRect(context),
+        startBounds: getScreenRect(transitioning),
+        endBounds: getScreenRect(incoming),
         element: transitioning,
         startProps: getPermittedCssStyles(getComputedStyle(transitioning)),
         endProps: getPermittedCssStyles(getComputedStyle(incoming)),

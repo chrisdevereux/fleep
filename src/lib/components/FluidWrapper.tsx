@@ -4,7 +4,7 @@ import { AnimatedComponent } from "../AnimationManager";
 import { TransitionIn, TransitionOut, TransitionConfig, TransitionFrom } from "./TransitionConfig";
 import { isElementOfType, isElementNotOfType } from "../support/util";
 import { TransitionDescriptor } from "../TransitionDescriptor";
-import { springTransition } from "../transition/popmotion";
+import { nullTransition } from "../transition/NullTransition";
 
 export interface FluidWrapperProps {
   id: string
@@ -32,7 +32,7 @@ export class FluidWrapper extends React.Component<FluidWrapperProps> implements 
     
     return config && {
       target: React.Children.only(config.props.children),
-      transition: config.props.using || springTransition()
+      transition: config.props.using || nullTransition()
     }
   }
 
@@ -41,7 +41,7 @@ export class FluidWrapper extends React.Component<FluidWrapperProps> implements 
 
     return config && {
       target: React.Children.only(config.props.children),
-      transition: config.props.using || springTransition()
+      transition: config.props.using || nullTransition()
     }
   }
 
@@ -50,7 +50,7 @@ export class FluidWrapper extends React.Component<FluidWrapperProps> implements 
 
     return {
       target: this.mainChild,
-      transition: config && config.props.using || springTransition()
+      transition: config && config.props.using || nullTransition()
     }
   }
 

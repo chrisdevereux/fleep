@@ -1,12 +1,13 @@
 import { StyleMap } from "../support/style";
+import { Rect } from "../support/geometry";
 
 export interface TransitionParams {
   element: HTMLElement
   startProps: StyleMap
   endProps: StyleMap
-  startBounds: ClientRect
-  endBounds: ClientRect
-  contextBounds: ClientRect
+  startBounds: Rect
+  endBounds: Rect
+  contextBounds: Rect
   onCompleted: Transition.OnComplete
 }
 
@@ -15,6 +16,7 @@ export interface Transition {
 }
 
 export namespace Transition {
+ 
   export type OnComplete = (err?: Error) => void
 
   export interface Progress {

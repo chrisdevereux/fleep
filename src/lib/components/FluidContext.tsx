@@ -2,7 +2,7 @@ import React from "react";
 import { AnimationManager, AnimationManagerDelegate } from "../AnimationManager";
 import { FluidWrapper } from "./FluidWrapper";
 
-interface TransitionComponents {
+export interface TransitionComponents {
   Transition: typeof FluidWrapper 
   TransitionContext: React.ComponentType
 }
@@ -18,6 +18,7 @@ export function createTransitionContext(): TransitionComponents {
     private ref = React.createRef<HTMLDivElement>()
 
     fluidManager = new AnimationManager(this)
+    contextMounted = false
 
     getContextElement(): HTMLElement {
       if (!this.ref.current) {
@@ -25,6 +26,14 @@ export function createTransitionContext(): TransitionComponents {
       }
 
       return this.ref.current
+    }
+
+    componentDidMount() {
+      this.contextMounted = true
+    }
+
+    componentWillUnmount() {
+      this.contextMounted = false
     }
 
     render() {

@@ -1,13 +1,16 @@
 import { Animation, AnimationDelegate } from "./Animation";
 import { render, unmountComponentAtNode } from "react-dom";
-import React from "react";
 import { Transition } from "../transition/Transition";
-import { springTransition } from "../transition/popmotion";
 import { getPermittedCssStyles } from "../support/style";
 import { TransitionDescriptor } from "../TransitionDescriptor";
+import { getScreenRect, pointToPixelString, localRectFromScreenRect } from "../support/geometry";
 
 export class AnimateOut implements Animation {
   private progress?: Transition.Progress
+
+  private get contextBounds() {
+    return getScreenRect(this.delegate.getContextElement())
+  }
   
   constructor(
     outgoing: HTMLElement,
@@ -16,8 +19,8 @@ export class AnimateOut implements Animation {
     private delegate: AnimationDelegate,
     private transitioning = outgoing.cloneNode() as HTMLElement,
     private outgoingStyle = getPermittedCssStyles(getComputedStyle(outgoing)),
-    private outgoingBounds = outgoing.getBoundingClientRect()
-  ) { }
+    private outgoingBounds = getScreenRect(outgoing)
+  ) {}
 
   get active() {
     return Boolean(this.progress)
@@ -27,6 +30,11 @@ export class AnimateOut implements Animation {
     // Avoid flickering by immediately adding the transition node to the dom
     // before determining whether the transition should take place
     this.delegate.getContextElement().appendChild(this.transitioning)
+
+    this.transitioning.style.position = 'absolute'
+    this.transitioning.style.top = "0px"
+    this.transitioning.style.left = "0px"
+    this.transitioning.style.transform = `translate(${pointToPixelString(localRectFromScreenRect(this.outgoingBounds, this.contextBounds))})`
   }
 
   abortStart() {
@@ -36,30 +44,25 @@ export class AnimateOut implements Animation {
   start() {
     const context = this.delegate.getContextElement()
     const finalParent = document.createElement('div')
-    const transitioning = this.transitioning
-  
+
     finalParent.style.opacity = "0"
     context.appendChild(finalParent)
 
     render(this.transitionDef.target, finalParent, () => {
       const final = finalParent.children[0] as HTMLElement
-  
+
       this.progress = this.transitionDef.transition.start({
-        contextBounds: context.getBoundingClientRect(),
+        contextBounds: this.contextBounds,
         startBounds: this.outgoingBounds,
-        endBounds: final.getBoundingClientRect(),
-        element: transitioning,
+        endBounds: getScreenRect(final),
+        element: this.transitioning,
         startProps: this.outgoingStyle,
         endProps: getPermittedCssStyles(getComputedStyle(final)),
         onCompleted: () => {
-          transitioning.remove()
+          this.transitioning.remove()
           this.delegate.animationDidComplete(this)
         }
       })
-  
-      transitioning.style.position = 'absolute'
-      transitioning.style.top = "0px"
-      transitioning.style.left = "0px"
 
       unmountComponentAtNode(finalParent)
     })

@@ -4,6 +4,8 @@ export function debug(...args: any[]) {
   console.log(...args)
 }
 
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 export type Constructor<T = object> = new (...args: any[]) => T 
 
 export function isInstanceOf<T>(constructor: Constructor<T>) {

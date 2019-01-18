@@ -1,22 +1,34 @@
 import { Animation, AnimationDelegate } from "./Animation";
 import { StyleMap, getPermittedCssStyles } from "../support/style";
-import { springTransition } from "../transition/popmotion";
 import { Transition } from "../transition/Transition";
 import { TransitionDescriptor } from "../TransitionDescriptor";
+import { getScreenRect, Rect, pointToPixelString, localRectFromScreenRect } from "../support/geometry";
 
 export class AnimateTo implements Animation {
-  private outgoingBounds: ClientRect
+  private outgoingBounds: Rect
   private outgoingStyles: StyleMap
   private progress?: Transition.Progress
 
+  private get contextBounds() {
+    return getScreenRect(this.delegate.getContextElement())
+  }
+
   constructor(
-    private outgoingElement: HTMLElement,
+    outgoingElement: HTMLElement,
     readonly id: string,
     private transitionDef: TransitionDescriptor,
     private delegate: AnimationDelegate,
+    private transitioning = outgoingElement.cloneNode() as HTMLElement
   ) {
-    this.outgoingBounds = outgoingElement.getBoundingClientRect()
+    this.outgoingBounds = getScreenRect(outgoingElement)
     this.outgoingStyles = getPermittedCssStyles(getComputedStyle(outgoingElement))
+
+    this.delegate.getContextElement().appendChild(this.transitioning)
+
+    this.transitioning.style.position = 'absolute'
+    this.transitioning.style.top = "0px"
+    this.transitioning.style.left = "0px"
+    this.transitioning.style.transform = `translate(${pointToPixelString(localRectFromScreenRect(this.outgoingBounds, this.contextBounds))})`
   }
   
   get active() {
@@ -31,28 +43,23 @@ export class AnimateTo implements Animation {
 
   startWithElement(incoming: HTMLElement) {
     const context = this.delegate.getContextElement()
-    const outgoing = this.outgoingElement
-    const transitioning = outgoing.cloneNode() as HTMLElement
 
     this.progress = this.transitionDef.transition.start({
-      contextBounds: context.getBoundingClientRect(),
+      contextBounds: this.contextBounds,
       startBounds: this.outgoingBounds,
-      endBounds: incoming.getBoundingClientRect(),
-      element: transitioning,
+      endBounds: getScreenRect(incoming),
+      element: this.transitioning,
       startProps: this.outgoingStyles,
       endProps: getPermittedCssStyles(getComputedStyle(incoming)),
       onCompleted: () => {
         incoming.style.opacity = null;
-        transitioning.remove()
+        this.transitioning.remove()
         this.delegate.animationDidComplete(this)
       }
     })
 
     incoming.style.opacity = '0';
-    transitioning.style.position = 'absolute'
-    transitioning.style.top = "0px"
-    transitioning.style.left = "0px"
 
-    context.appendChild(transitioning)
+    context.appendChild(this.transitioning)
   }
 }

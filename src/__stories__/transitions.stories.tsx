@@ -6,8 +6,8 @@ import {
   TransitionFrom,
   TransitionIn,
   TransitionOut,
-} from '../src'
-import { springTransition } from '../src/popmotion'
+} from '..'
+import { springTransition } from '../popmotion'
 
 const { Transition, TransitionContext } = createTransitionContext()
 

@@ -1,11 +1,11 @@
 import React from 'react'
 import should from 'should'
-import '../../test/setup'
 import { TransitionIn } from '../lib/components/TransitionConfig'
 import { getScreenRect } from '../lib/support/geometry'
 import { Widget, widgetSize } from './helpers/components'
 import { IntegrationTestFixture } from './helpers/IntegrationTestFixture'
 import { spyTransition } from './helpers/TransitionSpy'
+import './setup'
 
 describe('animation in', () => {
   it('should not animate in when mounted with context', async () => {

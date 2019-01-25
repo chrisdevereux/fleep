@@ -1,9 +1,9 @@
 import should from 'should'
+import { createTestElement } from '../../../__tests__/helpers/testElement'
 import { getScreenRect } from '../../support/geometry'
 import { Omit } from '../../support/util'
 import { springTransition } from '../popmotion'
 import { Transition, TransitionParams } from '../Transition'
-import { createTestElement } from './helpers/testElement'
 
 describe('popmotion transitions', () => {
   describe('spring', () => {

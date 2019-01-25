@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -eo pipefail
+PATH=$PATH:$(pwd)/node_modules/.bin
+
+rm -rf index.js popmotion.js *.d.ts lib
+tsc --outDir .

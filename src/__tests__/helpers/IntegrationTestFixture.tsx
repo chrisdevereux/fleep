@@ -1,6 +1,6 @@
-import { mount, ReactWrapper } from "enzyme";
-import React from "react";
-import { createTransitionContext } from "../..";
+import { mount, ReactWrapper } from 'enzyme'
+import React from 'react'
+import { createTransitionContext } from '../..'
 
 const context = createTransitionContext()
 
@@ -17,9 +17,8 @@ export class IntegrationTestFixture {
       document.body.append(root)
 
       this.enzyme = mount(<IntegrationWrapper>{node}</IntegrationWrapper>, {
-        attachTo: root
+        attachTo: root,
       })
-    
     } else {
       this.enzyme.instance().setState({ children: node })
       this.enzyme.update()
@@ -36,7 +35,10 @@ export class IntegrationTestFixture {
 
 const UNMOUNT = Symbol('UNMOUNT')
 
-class IntegrationWrapper extends React.Component<{}, { children: React.ReactNode | typeof UNMOUNT }> {
+class IntegrationWrapper extends React.Component<
+  {},
+  { children: React.ReactNode | typeof UNMOUNT }
+> {
   state = { children: this.props.children }
 
   render() {

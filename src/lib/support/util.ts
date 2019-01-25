@@ -1,18 +1,16 @@
-import React from "react";
-
-export function debug(...args: any[]) {
-  console.log(...args)
-}
+import React from 'react'
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
-export type Constructor<T = object> = new (...args: any[]) => T 
+export type Constructor<T = object> = new (...args: any[]) => T
 
 export function isInstanceOf<T>(constructor: Constructor<T>) {
   return (x: unknown): x is T => x instanceof constructor
 }
 
-export function isElementOfType<Props>(constructor: Constructor<React.Component<Props>>) {
+export function isElementOfType<Props>(
+  constructor: Constructor<React.Component<Props>>,
+) {
   return (x: React.ReactNode): x is React.ReactElement<Props> => {
     return React.isValidElement(x) && isSubclassOf(constructor)(x.type)
   }

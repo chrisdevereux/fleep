@@ -1,4 +1,4 @@
-import { Transition } from "./Transition";
+import { Transition } from './Transition'
 
 export function nullTransition(): Transition {
   return {
@@ -8,8 +8,8 @@ export function nullTransition(): Transition {
       return {
         stop() {
           onCompleted()
-        }
+        },
       }
-    }
+    },
   }
 }

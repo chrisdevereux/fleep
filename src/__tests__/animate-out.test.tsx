@@ -1,11 +1,11 @@
-import '../../test/setup'
-import React from "react";
+import React from 'react'
 import should from 'should'
-import { IntegrationTestFixture } from "./helpers/IntegrationTestFixture";
-import { TransitionOut } from "../lib/components/TransitionConfig";
-import { Widget, widgetSize } from "./helpers/components";
-import { spyTransition } from "./helpers/TransitionSpy";
-import { getScreenRect } from '../lib/support/geometry';
+import '../../test/setup'
+import { TransitionOut } from '../lib/components/TransitionConfig'
+import { getScreenRect } from '../lib/support/geometry'
+import { Widget, widgetSize } from './helpers/components'
+import { IntegrationTestFixture } from './helpers/IntegrationTestFixture'
+import { spyTransition } from './helpers/TransitionSpy'
 
 describe('animation out', () => {
   it('should keep dom element in place after unmounting', async () => {
@@ -19,7 +19,7 @@ describe('animation out', () => {
           </TransitionOut>
 
           <Widget id="widget" x={0} y={0} opacity={1} />
-        </fixture.transition>
+        </fixture.transition>,
       )
       .unmount()
 
@@ -38,7 +38,7 @@ describe('animation out', () => {
           </TransitionOut>
 
           <Widget x={0} y={0} opacity={1} />
-        </fixture.transition>
+        </fixture.transition>,
       )
       .unmount()
 
@@ -59,7 +59,7 @@ describe('animation out', () => {
           </TransitionOut>
 
           <Widget x={10} y={10} opacity={1} />
-        </fixture.transition>
+        </fixture.transition>,
       )
       .render(null)
 
@@ -69,7 +69,7 @@ describe('animation out', () => {
 
     should(spy.relativeStartBounds).match({ x: 10, y: 10, ...widgetSize })
     should(spy.relativeEndBounds).match({ x: 0, y: 0, ...widgetSize })
-    
+
     should(spy.startProps).match({ opacity: '1' })
     should(spy.endProps).match({ opacity: '0' })
 

@@ -1,8 +1,13 @@
-import { Animation, AnimationDelegate } from "./Animation";
-import { StyleMap, getPermittedCssStyles } from "../support/style";
-import { Transition } from "../transition/Transition";
-import { TransitionDescriptor } from "../TransitionDescriptor";
-import { getScreenRect, Rect, pointToPixelString, localRectFromScreenRect } from "../support/geometry";
+import {
+  getScreenRect,
+  localRectFromScreenRect,
+  pointToPixelString,
+  Rect,
+} from '../support/geometry'
+import { getPermittedCssStyles, StyleMap } from '../support/style'
+import { Transition } from '../transition/Transition'
+import { TransitionDescriptor } from '../TransitionDescriptor'
+import { Animation, AnimationDelegate } from './Animation'
 
 export class AnimateTo implements Animation {
   private outgoingBounds: Rect
@@ -18,19 +23,23 @@ export class AnimateTo implements Animation {
     readonly id: string,
     private transitionDef: TransitionDescriptor,
     private delegate: AnimationDelegate,
-    private transitioning = outgoingElement.cloneNode() as HTMLElement
+    private transitioning = outgoingElement.cloneNode() as HTMLElement,
   ) {
     this.outgoingBounds = getScreenRect(outgoingElement)
-    this.outgoingStyles = getPermittedCssStyles(getComputedStyle(outgoingElement))
+    this.outgoingStyles = getPermittedCssStyles(
+      getComputedStyle(outgoingElement),
+    )
 
     this.delegate.getContextElement().appendChild(this.transitioning)
 
     this.transitioning.style.position = 'absolute'
-    this.transitioning.style.top = "0px"
-    this.transitioning.style.left = "0px"
-    this.transitioning.style.transform = `translate(${pointToPixelString(localRectFromScreenRect(this.outgoingBounds, this.contextBounds))})`
+    this.transitioning.style.top = '0px'
+    this.transitioning.style.left = '0px'
+    this.transitioning.style.transform = `translate(${pointToPixelString(
+      localRectFromScreenRect(this.outgoingBounds, this.contextBounds),
+    )})`
   }
-  
+
   get active() {
     return Boolean(this.progress)
   }
@@ -52,13 +61,13 @@ export class AnimateTo implements Animation {
       startProps: this.outgoingStyles,
       endProps: getPermittedCssStyles(getComputedStyle(incoming)),
       onCompleted: () => {
-        incoming.style.opacity = null;
+        incoming.style.opacity = null
         this.transitioning.remove()
         this.delegate.animationDidComplete(this)
-      }
+      },
     })
 
-    incoming.style.opacity = '0';
+    incoming.style.opacity = '0'
 
     context.appendChild(this.transitioning)
   }

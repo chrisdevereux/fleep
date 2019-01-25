@@ -1,0 +1,21 @@
+{
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "rules": {
+    "member-access": false,
+    "jsx-boolean-value": false,
+    "no-empty-interface": false,
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+    "jsx-no-lambda": false,
+    "no-namespace": false,
+    "max-classes-per-file": false
+  },
+  "linterOptions": {
+    "exclude": [
+      "config/**",
+      "node_modules/**",
+      "coverage/**",
+      ".storybook/vendor/**"
+    ]
+  }
+}

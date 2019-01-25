@@ -1,4 +1,4 @@
-import { Transition } from "./transition/Transition";
+import { Transition } from './transition/Transition'
 
 export interface TransitionDescriptor {
   transition: Transition

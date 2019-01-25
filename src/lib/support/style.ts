@@ -4,7 +4,7 @@ export type StyleMap = Partial<Record<StyleKey, string>>
 const permittedStyleKeys: StyleKey[] = [
   'borderRadius',
   'opacity',
-  'backgroundColor'
+  'backgroundColor',
 ]
 
 export function getPermittedCssStyles(styles: CSSStyleDeclaration) {

@@ -1,30 +1,36 @@
-import React from 'react';
-
-import { storiesOf } from '@storybook/react';
-import { createTransitionContext, TransitionIn, TransitionOut, TransitionFrom } from '../src';
-import { Keyframes, Frame } from 'react-keyframes';
-import { springTransition } from '../src/popmotion';
+import { storiesOf } from '@storybook/react'
+import React from 'react'
+import { Frame, Keyframes } from 'react-keyframes'
+import {
+  createTransitionContext,
+  TransitionFrom,
+  TransitionIn,
+  TransitionOut,
+} from '../src'
+import { springTransition } from '../src/popmotion'
 
 const { Transition, TransitionContext } = createTransitionContext()
 
-const Block = React.forwardRef((props: React.CSSProperties, ref: React.Ref<HTMLDivElement>) => (
-  <div
-    ref={ref}
-    style={{
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      width: 100,
-      height: 100,
-      borderRadius: props.width || 100,
-      backgroundColor: 'tomato',
-      ...props
-    }}
-  />
-))
+const Block = React.forwardRef(
+  (props: React.CSSProperties, ref: React.Ref<HTMLDivElement>) => (
+    <div
+      ref={ref}
+      style={{
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: 100,
+        height: 100,
+        borderRadius: props.width || 100,
+        backgroundColor: 'tomato',
+        ...props,
+      }}
+    />
+  ),
+)
 
 storiesOf('fluid transitions', module)
-  .add('flip flop', () =>
+  .add('flip flop', () => (
     <TransitionContext>
       <Keyframes loop>
         <Frame key={1} duration={3_000}>
@@ -39,8 +45,8 @@ storiesOf('fluid transitions', module)
         </Frame>
       </Keyframes>
     </TransitionContext>
-  )
-  .add('enter - transition - exit', () =>
+  ))
+  .add('enter - transition - exit', () => (
     <TransitionContext>
       <Keyframes loop>
         <Frame key={1} duration={1_500}>
@@ -58,11 +64,20 @@ storiesOf('fluid transitions', module)
             <Block />
           </Transition>
         </Frame>
-        
+
         <Frame key={3} duration={3_000}>
           <Transition id="1">
-            <TransitionOut using={springTransition({ stiffness: 300, mass: 1.5 })}>
-              <Block left={200} top={200} width={500} height={500} opacity={0} transform="scale(0.1)" />
+            <TransitionOut
+              using={springTransition({ stiffness: 300, mass: 1.5 })}
+            >
+              <Block
+                left={200}
+                top={200}
+                width={500}
+                height={500}
+                opacity={0}
+                transform="scale(0.1)"
+              />
             </TransitionOut>
 
             <Block left={200} top={200} width={500} height={500} />
@@ -70,4 +85,4 @@ storiesOf('fluid transitions', module)
         </Frame>
       </Keyframes>
     </TransitionContext>
-  )
+  ))

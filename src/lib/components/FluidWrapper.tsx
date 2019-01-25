@@ -1,17 +1,23 @@
-import React from "react";
-import { FluidManagerContext } from "./FluidContext";
-import { AnimatedComponent } from "../AnimationManager";
-import { TransitionIn, TransitionOut, TransitionConfig, TransitionFrom } from "./TransitionConfig";
-import { isElementOfType, isElementNotOfType } from "../support/util";
-import { TransitionDescriptor } from "../TransitionDescriptor";
-import { nullTransition } from "../transition/NullTransition";
+import React from 'react'
+import { AnimatedComponent } from '../AnimationManager'
+import { isElementNotOfType, isElementOfType } from '../support/util'
+import { nullTransition } from '../transition/NullTransition'
+import { TransitionDescriptor } from '../TransitionDescriptor'
+import { FluidManagerContext } from './FluidContext'
+import {
+  TransitionConfig,
+  TransitionFrom,
+  TransitionIn,
+  TransitionOut,
+} from './TransitionConfig'
 
 export interface FluidWrapperProps {
   id: string
   children: React.ReactNode
 }
 
-export class FluidWrapper extends React.Component<FluidWrapperProps> implements AnimatedComponent {
+export class FluidWrapper extends React.Component<FluidWrapperProps>
+  implements AnimatedComponent {
   context!: FluidManagerContext | undefined
   childRef = React.createRef()
 
@@ -29,20 +35,24 @@ export class FluidWrapper extends React.Component<FluidWrapperProps> implements 
 
   get transitionIn(): TransitionDescriptor | undefined {
     const config = this.children.find(isElementOfType(TransitionIn))
-    
-    return config && {
-      target: React.Children.only(config.props.children),
-      transition: config.props.using || nullTransition()
-    }
+
+    return (
+      config && {
+        target: React.Children.only(config.props.children),
+        transition: config.props.using || nullTransition(),
+      }
+    )
   }
 
   get transitionOut() {
     const config = this.children.find(isElementOfType(TransitionOut))
 
-    return config && {
-      target: React.Children.only(config.props.children),
-      transition: config.props.using || nullTransition()
-    }
+    return (
+      config && {
+        target: React.Children.only(config.props.children),
+        transition: config.props.using || nullTransition(),
+      }
+    )
   }
 
   get transitionFrom() {
@@ -50,7 +60,7 @@ export class FluidWrapper extends React.Component<FluidWrapperProps> implements 
 
     return {
       target: this.mainChild,
-      transition: config && config.props.using || nullTransition()
+      transition: (config && config.props.using) || nullTransition(),
     }
   }
 
@@ -84,11 +94,8 @@ export class FluidWrapper extends React.Component<FluidWrapperProps> implements 
   }
 
   render() {
-    return React.cloneElement(
-      this.mainChild,
-      {
-        ref: this.childRef,
-      }
-    )
+    return React.cloneElement(this.mainChild, {
+      ref: this.childRef,
+    })
   }
 }

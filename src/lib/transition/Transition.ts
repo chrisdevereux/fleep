@@ -1,5 +1,5 @@
-import { StyleMap } from "../support/style";
-import { Rect } from "../support/geometry";
+import { Rect } from '../support/geometry'
+import { StyleMap } from '../support/style'
 
 export interface TransitionParams {
   element: HTMLElement
@@ -16,7 +16,6 @@ export interface Transition {
 }
 
 export namespace Transition {
- 
   export type OnComplete = (err?: Error) => void
 
   export interface Progress {

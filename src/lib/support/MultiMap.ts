@@ -13,7 +13,7 @@ export class MultiMap<Key, Value> {
 
   get(key: Key) {
     const valueSet = this.state.get(key)
-    return valueSet && Array.from(valueSet.values()) || []
+    return (valueSet && Array.from(valueSet.values())) || []
   }
 
   delete(key: Key, value: Value) {

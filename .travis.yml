@@ -6,9 +6,12 @@ addons:
   chrome: stable
 
 cache:
-  directories: ~/.npm
-  notifications:
-    email: false
+  directories:
+    - ~/.npm
+    - node_modules
+
+notifications:
+  email: false
 
 install:
   yarn install --frozen-lockfile
@@ -23,5 +26,3 @@ deploy:
   script:
     - tasks/build
     - npx semantic-release
-  on:
-    branch: master

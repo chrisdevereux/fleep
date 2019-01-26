@@ -19,6 +19,7 @@ install:
 script:
   - yarn typecheck
   - yarn test
+  - cat coverage/lcov/lcovonly | yarn coveralls
 
 deploy:
   provider: script

@@ -23,7 +23,11 @@ module.exports = function(config) {
     singleRun: true,
     
     karmaTypescriptConfig: {
-      tsconfig: "./tsconfig.json"
-    }
+      tsconfig: "./tsconfig.json",
+      reports: {
+        html: { subdirectory: 'html' },
+        lcovonly: { subdirectory: 'lcov' }
+      }
+    },
   })
 }

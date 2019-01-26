@@ -1,0 +1,12 @@
+/src
+/.storybook
+/coverage
+/tasks
+/.travis.yml
+/.gitignore
+/karma.conf.js
+/tsconfig.json
+/tslint.json
+/yarn.lock
+**/__tests__
+**/__stories__

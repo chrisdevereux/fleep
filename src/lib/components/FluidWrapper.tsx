@@ -38,7 +38,9 @@ export class FluidWrapper extends React.Component<FluidWrapperProps>
 
     return (
       config && {
-        target: React.Children.only(config.props.children),
+        target: React.Children.only(
+          config.props.children,
+        ) as React.ReactElement<{}>,
         transition: config.props.using || nullTransition(),
       }
     )
@@ -49,7 +51,9 @@ export class FluidWrapper extends React.Component<FluidWrapperProps>
 
     return (
       config && {
-        target: React.Children.only(config.props.children),
+        target: React.Children.only(
+          config.props.children,
+        ) as React.ReactElement<{}>,
         transition: config.props.using || nullTransition(),
       }
     )

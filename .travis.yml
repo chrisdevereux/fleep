@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+  - 10
+
+addons:
+  chrome: stable
+
+cache:
+  directories: ~/.npm
+  notifications:
+    email: false
+
+install:
+  yarn install --frozen-lockfile
+
+script:
+  - yarn typecheck
+  - yarn test
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+    - tasks/build
+    - npx semantic-release
+  on:
+    branch: master

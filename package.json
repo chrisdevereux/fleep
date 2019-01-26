@@ -1,9 +1,9 @@
 {
   "name": "fleep",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "Painless fluid transitions for react",
   "main": "index.js",
-  "repository": "git@gitlab.com:chrisdevereux/fleep.git",
+  "repository": "git@github.com:chrisdevereux/fleep.git",
   "author": "Chris Devereux <devereux.chris@gmail.com>",
   "license": "MIT",
   "devDependencies": {
@@ -38,6 +38,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-keyframes": "^0.2.3",
+    "semantic-release": "^15.13.3",
     "should": "^13.2.3",
     "tslint": "^5.12.1",
     "typescript": "^3.2.2"
@@ -47,7 +48,8 @@
     "test": "karma start",
     "watch": "node node_modules/karma/bin/karma start --browsers=Chrome --single-run=false --auto-watch",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "semantic-release": "semantic-release"
   },
   "husky": {
     "hooks": {

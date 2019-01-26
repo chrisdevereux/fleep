@@ -5,7 +5,10 @@ module.exports = function(config) {
     files: [
       { pattern: "src/**/*.ts" },
       { pattern: "src/**/*.tsx" },
-      { pattern: "test/*.ts" },
+    ],
+
+    exclude: [
+      '**/__stories__/**'
     ],
 
     preprocessors: {

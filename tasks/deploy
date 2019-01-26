@@ -3,5 +3,8 @@
 set -eo pipefail
 PATH=$PATH:$(pwd)/node_modules/.bin
 
-rm -rf index.js popmotion.js *.d.ts lib
+echo "BUILDING..."
 tsc --outDir .
+
+echo "DEPLOYING"
+semantic-release

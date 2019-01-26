@@ -23,6 +23,4 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script:
-    - tasks/build
-    - npx semantic-release
+  script: tasks/deploy

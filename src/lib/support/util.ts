@@ -1,11 +1,21 @@
 import React from 'react'
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
 export type Constructor<T = object> = new (...args: any[]) => T
+export type Dict<T> = Partial<Record<string, T>>
 
 export function isInstanceOf<T>(constructor: Constructor<T>) {
   return (x: unknown): x is T => x instanceof constructor
+}
+
+export function asInstanceOf<T>(constructor: Constructor<T>) {
+  return (x: unknown): T => {
+    if (x instanceof constructor) {
+      return x
+    }
+
+    throw Error(`Expected ${constructor.name}`)
+  }
 }
 
 export function isElementOfType<Props>(

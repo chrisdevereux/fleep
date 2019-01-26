@@ -1,5 +1,4 @@
 import { spring, styler, value } from 'popmotion'
-import { localRectFromScreenRect } from '../support/geometry'
 import { Transition } from './Transition'
 
 interface SpringAnimationConfig {
@@ -13,29 +12,28 @@ interface SpringAnimationConfig {
 
 export function springTransition(
   config: Partial<SpringAnimationConfig> = {},
-): Transition {
+): Transition<HTMLElement, CSSStyleDeclaration> {
   return {
     start({
       element,
       startBounds,
       endBounds,
-      contextBounds,
       startProps,
       endProps,
       onCompleted,
     }) {
       const from = {
-        ...localRectFromScreenRect(startBounds, contextBounds),
+        ...startBounds,
         ...startProps,
       }
 
-      const to: any = {
-        ...localRectFromScreenRect(endBounds, contextBounds),
+      const to = {
+        ...endBounds,
         ...endProps,
       }
 
-      const transitioner = styler(element)
-      const transitionVal = value(from as any, transitioner.set)
+      const transitioner = styler(element.nativeElement)
+      const transitionVal = value(from, transitioner.set)
       const action = spring({
         from: transitionVal.get(),
         to,

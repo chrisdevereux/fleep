@@ -1,12 +1,22 @@
 import { mount, ReactWrapper } from 'enzyme'
 import React from 'react'
 import { createTransitionContext } from '../..'
+import { Rect } from '../../lib/support/geometry';
 
 const context = createTransitionContext()
 
 export class IntegrationTestFixture {
   enzyme!: ReactWrapper
   transition = context.Transition
+
+  bounds({ x, y, width, height }: Rect) {
+    return {
+      x: x + 100,
+      y: y + 100,
+      width,
+      height
+    }
+  }
 
   render(node: React.ReactNode) {
     if (!this.enzyme) {

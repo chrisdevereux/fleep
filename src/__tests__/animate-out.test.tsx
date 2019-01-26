@@ -1,7 +1,6 @@
 import React from 'react'
 import should from 'should'
 import { TransitionOut } from '../lib/components/TransitionConfig'
-import { getScreenRect } from '../lib/support/geometry'
 import { Widget, widgetSize } from './helpers/components'
 import { IntegrationTestFixture } from './helpers/IntegrationTestFixture'
 import { spyTransition } from './helpers/TransitionSpy'
@@ -67,13 +66,15 @@ describe('animation out', () => {
 
     should(await spy.started()).be.true()
 
-    should(spy.relativeStartBounds).match({ x: 10, y: 10, ...widgetSize })
-    should(spy.relativeEndBounds).match({ x: 0, y: 0, ...widgetSize })
+    should(spy.startBounds).match(
+      fixture.bounds({ x: 10, y: 10, ...widgetSize }),
+    )
+    should(spy.endBounds).match(fixture.bounds({ x: 0, y: 0, ...widgetSize }))
 
     should(spy.startProps).match({ opacity: '1' })
     should(spy.endProps).match({ opacity: '0' })
 
-    should(getScreenRect(spy.element!)).match(spy.startBounds!)
-    should(spy.element!.parentElement).should.not.be.undefined()
+    should(spy.element!.bounds).match(spy.startBounds!)
+    should(spy.element!.mounted).should.be.true()
   })
 })

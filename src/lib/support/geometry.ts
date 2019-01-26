@@ -10,13 +10,6 @@ export interface Point {
   y: number
 }
 
-export function getScreenRect(el: Element): Rect {
-  const { x, y, width, height } = el.getBoundingClientRect() as DOMRect &
-    ClientRect
-
-  return { x, y, width, height }
-}
-
 export function localRectFromScreenRect(
   { x, y, width, height }: Rect,
   origin: Point,

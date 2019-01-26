@@ -1,6 +1,5 @@
 import should from 'should'
 import { createTestElement } from '../../../__tests__/helpers/testElement'
-import { getScreenRect } from '../../support/geometry'
 import { Omit } from '../../support/util'
 import { springTransition } from '../popmotion'
 import { Transition, TransitionParams } from '../Transition'
@@ -12,21 +11,20 @@ describe('popmotion transitions', () => {
 
       await runTransition(springTransition(), {
         element,
-        contextBounds: { x: 10, y: 10, width: 10, height: 10 },
         startBounds: { x: 0, y: 0, width: 1, height: 1 },
         endBounds: { x: 10, y: 10, width: 1, height: 1 },
         startProps: { opacity: '0' },
         endProps: { opacity: '1' },
       })
 
-      should(getScreenRect(element)).match({
+      should(element.bounds).match({
         x: 0,
         y: 0,
         width: 1,
         height: 1,
       })
 
-      should(getComputedStyle(element).opacity).equal('1')
+      should(element.style.opacity).equal('1')
     })
   })
 })

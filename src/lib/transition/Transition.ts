@@ -1,18 +1,18 @@
+import { ViewNode } from '../platform/Platform';
 import { Rect } from '../support/geometry'
-import { StyleMap } from '../support/style'
+import { Dict } from '../support/util';
 
-export interface TransitionParams {
-  element: HTMLElement
-  startProps: StyleMap
-  endProps: StyleMap
+export interface TransitionParams<NativeElementT= any, StyleT = any> {
+  element: ViewNode<StyleT, NativeElementT>
+  startProps: Dict<keyof StyleT>
+  endProps: Dict<keyof StyleT>
   startBounds: Rect
   endBounds: Rect
-  contextBounds: Rect
   onCompleted: Transition.OnComplete
 }
 
-export interface Transition {
-  start(params: TransitionParams): Transition.Progress
+export interface Transition<NativeElementT = any, StyleT = any> {
+  start(params: TransitionParams<NativeElementT, StyleT>): Transition.Progress
 }
 
 export namespace Transition {

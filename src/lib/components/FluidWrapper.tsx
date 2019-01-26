@@ -1,9 +1,9 @@
 import React from 'react'
 import { AnimatedComponent } from '../AnimationManager'
+import { FluidManagerContext } from '../platform/web/WebTransitionContext'
 import { isElementNotOfType, isElementOfType } from '../support/util'
 import { nullTransition } from '../transition/NullTransition'
 import { TransitionDescriptor } from '../TransitionDescriptor'
-import { FluidManagerContext } from './FluidContext'
 import {
   TransitionConfig,
   TransitionFrom,
@@ -25,7 +25,7 @@ export class FluidWrapper extends React.Component<FluidWrapperProps>
     return this.props.id
   }
 
-  get element(): HTMLElement {
+  get ref(): HTMLElement {
     if (this.childRef.current instanceof HTMLElement) {
       return this.childRef.current
     }

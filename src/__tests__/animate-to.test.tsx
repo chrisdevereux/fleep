@@ -1,7 +1,6 @@
 import React from 'react'
 import should from 'should'
 import { TransitionFrom } from '../lib/components/TransitionConfig'
-import { getScreenRect } from '../lib/support/geometry'
 import { Widget, widgetSize } from './helpers/components'
 import { IntegrationTestFixture } from './helpers/IntegrationTestFixture'
 import { spyTransition } from './helpers/TransitionSpy'
@@ -43,13 +42,13 @@ describe('animation from', () => {
 
     should(await spy.started()).be.true()
 
-    should(spy.relativeStartBounds).match({ x: 10, y: 10, ...widgetSize })
-    should(spy.relativeEndBounds).match({ x: 20, y: 20, ...widgetSize })
+    should(spy.startBounds).match({ x: 10, y: 10, ...widgetSize })
+    should(spy.endBounds).match({ x: 20, y: 20, ...widgetSize })
 
     should(spy.startProps).match({ opacity: '1' })
     should(spy.endProps).match({ opacity: '1' })
 
-    should(getScreenRect(spy.element!)).match(spy.startBounds!)
-    should(spy.element!.parentElement).should.not.be.undefined()
+    should(spy.element!.bounds).match(spy.startBounds!)
+    should(spy.element!.mounted).be.true()
   })
 })

@@ -1,3 +1,5 @@
+import { DOMViewNode } from "../../lib/platform/web/WebNode";
+
 export function createTestElement() {
   const el = document.createElement('div')
   el.style.position = 'absolute'
@@ -6,5 +8,5 @@ export function createTestElement() {
 
   document.body.appendChild(el)
 
-  return el
+  return new DOMViewNode(el, document.body)
 }

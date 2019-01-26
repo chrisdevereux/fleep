@@ -1,7 +1,7 @@
 export {
   createTransitionContext,
   TransitionComponents,
-} from './lib/components/FluidContext'
+} from './lib/platform/web/WebTransitionContext'
 export {
   TransitionIn,
   TransitionOut,

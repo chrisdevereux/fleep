@@ -50,7 +50,6 @@ export class AnimationManager implements AnimationDelegate {
     }
 
     await new Promise(resolve => setTimeout(resolve))
-
     if (!animateTo.active) {
       this.activeAnimations.delete(id, animateTo)
 

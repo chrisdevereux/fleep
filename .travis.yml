@@ -10,16 +10,25 @@ cache:
     - ~/.npm
     - node_modules
 
+install:
+  yarn
+
+before_script:
+  - greenkeeper-lockfile-update
+  - git add package.json
+  - git commit --amend --no-edit
+
 notifications:
   email: false
 
-install:
-  yarn install --frozen-lockfile
-
 script:
+  - yarn check --integrity
   - yarn typecheck
   - yarn test
   - cat coverage/lcov/lcovonly | yarn coveralls
+
+after_script:
+  - greenkeeper-lockfile-upload
 
 deploy:
   provider: script

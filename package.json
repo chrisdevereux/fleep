@@ -8,7 +8,7 @@
   "license": "MIT",
   "devDependencies": {
     "@commitlint/config-conventional": "^7.3.1",
-    "@storybook/addon-actions": "^4.1.4",
+    "@storybook/addon-actions": "^5.3.5",
     "@storybook/addon-links": "^4.1.4",
     "@storybook/addons": "^4.1.4",
     "@storybook/react": "^4.1.4",

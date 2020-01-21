@@ -79,6 +79,6 @@
   },
   "dependencies": {
     "tslint-config-prettier": "^1.17.0",
-    "tslint-react": "^3.6.0"
+    "tslint-react": "^4.2.0"
   }
 }

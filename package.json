@@ -36,7 +36,7 @@
     "lint-staged": "^8.1.1",
     "mocha": "^5.2.0",
     "popmotion": "^8.5.5",
-    "prettier": "^1.16.1",
+    "prettier": "^2.0.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-keyframes": "^0.2.3",

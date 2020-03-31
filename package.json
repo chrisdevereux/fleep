@@ -9,7 +9,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^7.3.1",
     "@storybook/addon-actions": "^5.3.18",
-    "@storybook/addon-links": "^4.1.4",
+    "@storybook/addon-links": "^5.3.18",
     "@storybook/addons": "^4.1.4",
     "@storybook/react": "^4.1.4",
     "@types/enzyme": "^3.1.15",

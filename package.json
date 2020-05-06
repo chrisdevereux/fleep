@@ -35,7 +35,7 @@
     "karma-typescript": "4.0.0",
     "lint-staged": "^8.1.1",
     "mocha": "^5.2.0",
-    "popmotion": "^8.5.5",
+    "popmotion": "^8.7.2",
     "prettier": "^1.16.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
